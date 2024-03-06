@@ -58,13 +58,5 @@ contract CrossL2Inbox is ISemver {
         require(_id.timestamp <= block.timestamp, "CrossL2Inbox: invalid id timestamp"); // timestamp invariant
         uint256 chainId_ = _id.chainId;
         require(msg.sender == tx.origin, "CrossL2Inbox: Not EOA sender"); // only EOA invariant
-
-        assembly {
-            tstore(ORIGIN_SLOT, calldataload(4))
-            tstore(BLOCKNUMBER_SLOT, calldataload(36))
-            tstore(LOG_INDEX_SLOT, calldataload(68))
-            tstore(TIMESTAMP_SLOT, calldataload(100))
-            tstore(CHAINID_SLOT, chainId_)
-        }
     }
 }
