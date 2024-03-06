@@ -24,24 +24,4 @@ contract CrossL2Inbox is ISemver {
 
     /// @custom:semver 1.0.0
     string public constant version = "1.0.0";
-
-    function origin() public view returns (address _origin) { }
-
-    function blocknumber() public view returns (uint256 _blocknumber) { }
-
-    function logIndex() public view returns (uint256 _logIndex) { }
-
-    function timestamp() public view returns (uint256 _timestamp) { }
-
-    function chainId() public view returns (uint256 _chainId) { }
-
-    /// @notice Executes a cross chain message on the destination chain
-    /// @param _msg The message payload, matching the initiating message.
-    /// @param _id A Identifier pointing to the initiating message.
-    /// @param _target Account that is called with _msg.
-    function executeMessage(Identifier calldata _id, address _target, bytes calldata _msg) public payable {
-        require(_id.timestamp <= block.timestamp, "CrossL2Inbox: invalid id timestamp"); // timestamp invariant
-        uint256 chainId_ = _id.chainId;
-        require(msg.sender == tx.origin, "CrossL2Inbox: Not EOA sender"); // only EOA invariant
-    }
 }
