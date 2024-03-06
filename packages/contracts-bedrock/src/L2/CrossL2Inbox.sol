@@ -2,13 +2,14 @@
 pragma solidity ^0.8.24;
 
 import { Predeploys } from "src/libraries/Predeploys.sol";
+import { ISemver } from "src/universal/ISemver.sol";
 
 /// @custom:proxied
 /// @custom:predeploy 0x4200000000000000000000000000000000000022
 /// @title CrossL2Inbox
 /// @notice The CrossL2Inbox is responsible for executing a cross chain message on the destination
 ///         chain. It is permissionless to execute a cross chain message on behalf of any user.
-contract CrossL2Inbox {
+contract CrossL2Inbox is ISemver {
     struct Identifier {
         address origin;
         uint256 blocknumber;
