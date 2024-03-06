@@ -22,6 +22,5 @@ contract CrossL2Inbox is ISemver {
 
     address public l1Block;
 
-    /// @custom:semver 1.0.0
-    string public constant version = "1.0.0";
+    function origin() public view returns (address) { }
 }
