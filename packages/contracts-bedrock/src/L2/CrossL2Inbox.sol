@@ -38,7 +38,7 @@ contract CrossL2Inbox is ISemver {
     address internal constant l1Block;
 
     /// @custom:semver 1.0.0
-    string internal constant version = "1.0.0";
+    string constant version = "1.0.0";
 
     function origin() public view returns (address _origin) {
         assembly {
