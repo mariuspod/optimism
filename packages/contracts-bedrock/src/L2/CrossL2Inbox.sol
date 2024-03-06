@@ -20,21 +20,6 @@ contract CrossL2Inbox is ISemver {
         uint256 chainId;
     }
 
-    // bytes32(uint256(keccak256("crossl2inbox.identifier.origin")) - 1)
-    bytes32 public constant ORIGIN_SLOT = 0xd2b7c5071ec59eb3ff0017d703a8ea513a7d0da4779b0dbefe845808c300c815;
-
-    // bytes32(uint256(keccak256("crossl2inbox.identifier.blocknumber")) - 1)
-    bytes32 public constant BLOCKNUMBER_SLOT = 0x5a1da0738b7fdc60047c07bb519beb02aa32a8619de57e6258da1f1c2e020ccc;
-
-    // bytes32(uint256(keccak256("crossl2inbox.identifier.logindex")) - 1)
-    bytes32 public constant LOG_INDEX_SLOT = 0xab8acc221aecea88a685fabca5b88bf3823b05f335b7b9f721ca7fe3ffb2c30d;
-
-    // bytes32(uint256(keccak256("crossl2inbox.identifier.timestamp")) - 1)
-    bytes32 public constant TIMESTAMP_SLOT = 0x2e148a404a50bb94820b576997fd6450117132387be615e460fa8c5e11777e02;
-
-    // bytes32(uint256(keccak256("crossl2inbox.identifier.chainid")) - 1)
-    bytes32 public constant CHAINID_SLOT = 0x6e0446e8b5098b8c8193f964f1b567ec3a2bdaeba33d36acb85c1f1d3f92d313;
-
     address public l1Block;
 
     /// @custom:semver 1.0.0
