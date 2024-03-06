@@ -11,7 +11,7 @@ import { ISemver } from "src/universal/ISemver.sol";
 /// @title CrossL2Inbox
 /// @notice The CrossL2Inbox is responsible for executing a cross chain message on the destination
 ///         chain. It is permissionless to execute a cross chain message on behalf of any user.
-contract CrossL2Inbox {
+contract CrossL2Inbox is ISemver {
     struct Identifier {
         address origin;
         uint256 blocknumber;
@@ -36,6 +36,9 @@ contract CrossL2Inbox {
     bytes32 public CHAINID_SLOT = 0x6e0446e8b5098b8c8193f964f1b567ec3a2bdaeba33d36acb85c1f1d3f92d313;
 
     address public l1Block;
+
+    /// @custom:semver 1.0.0
+    string public version = "1.0.0";
 
     function origin() public view returns (address _origin) {
         assembly {
@@ -88,6 +91,6 @@ contract CrossL2Inbox {
 
         //bool success = SafeCall.callWithAllGas({ _target: _target, _value: msg.value, _calldata: _msg });
 
-        //require(success, "CrossL2Inbox: call failed");
+        require(success, "CrossL2Inbox: call failed");
     }
 }
