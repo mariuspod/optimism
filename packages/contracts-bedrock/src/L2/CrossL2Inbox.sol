@@ -20,7 +20,6 @@ contract CrossL2Inbox is ISemver {
         uint256 chainId;
     }
 
-    address public l1Block;
-
-    function origin() public view returns (address) { }
+    /// @custom:semver 1.0.0
+    string public constant version = "1.0.0";
 }
