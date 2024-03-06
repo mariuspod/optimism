@@ -4,6 +4,10 @@ pragma solidity ^0.8.24;
 import { Predeploys } from "src/libraries/Predeploys.sol";
 import { ISemver } from "src/universal/ISemver.sol";
 
+interface IL1Block {
+    function isInDependencySet(uint256 _chainId) external view returns (bool);
+}
+
 /// @custom:proxied
 /// @custom:predeploy 0x4200000000000000000000000000000000000022
 /// @title CrossL2Inbox
