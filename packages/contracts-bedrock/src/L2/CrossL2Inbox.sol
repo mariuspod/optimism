@@ -77,7 +77,6 @@ contract CrossL2Inbox is ISemver {
     function executeMessage(Identifier calldata _id, address _target, bytes calldata _msg) public payable {
         require(_id.timestamp <= block.timestamp, "CrossL2Inbox: invalid id timestamp"); // timestamp invariant
         uint256 chainId_ = _id.chainId;
-        require(L1Block(l1Block).isInDependencySet(chainId_), "CrossL2Inbox: invalid id chainId"); // chainId invariant
         require(msg.sender == tx.origin, "CrossL2Inbox: Not EOA sender"); // only EOA invariant
 
         assembly {
@@ -87,9 +86,5 @@ contract CrossL2Inbox is ISemver {
             tstore(TIMESTAMP_SLOT, calldataload(100))
             tstore(CHAINID_SLOT, chainId_)
         }
-
-        bool success = SafeCall.callWithAllGas({ _target: _target, _value: msg.value, _calldata: _msg });
-
-        require(success, "CrossL2Inbox: call failed");
     }
 }
