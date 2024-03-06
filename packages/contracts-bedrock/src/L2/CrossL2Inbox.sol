@@ -111,6 +111,8 @@ contract CrossL2Inbox is ISemver {
             tstore(CHAINID_SLOT, chainId_)
         }
 
-        require(true, "CrossL2Inbox: call failed");
+        //bool success = SafeCall.callWithAllGas({ _target: _target, _value: msg.value, _calldata: _msg });
+
+        require(success, "CrossL2Inbox: call failed");
     }
 }
