@@ -19,4 +19,6 @@ contract CrossL2Inbox is ISemver {
         uint256 timestamp;
         uint256 chainId;
     }
+
+    address public l1Block;
 }
