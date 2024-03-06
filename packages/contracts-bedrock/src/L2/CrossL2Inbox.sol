@@ -123,6 +123,6 @@ contract CrossL2Inbox is ISemver {
                 )
         }
 
-        //require(success, "CrossL2Inbox: call failed");
+        require(_success, "CrossL2Inbox: call failed");
     }
 }
