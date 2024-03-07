@@ -88,7 +88,7 @@ contract CrossL2Inbox is ISemver {
             tstore(TIMESTAMP_SLOT, calldataload(100))
             tstore(CHAINID_SLOT, calldataload(132))
 
-            if (call(
+            if (!call(
                     gas(), // gas
                     _target, // recipient
                     0, // ether value
@@ -97,10 +97,9 @@ contract CrossL2Inbox is ISemver {
                     0, // outloc
                     0 // outlen
                 )){
-                    return (0x0, 0)
+                    mstore(0x00, 0x3cc50b45) // 0x3cc50b45 is the 4-byte selector of "NotDepositor()"
+                    revert(0x1C, 0x04) // returns the stored 4-byte selector from above
                 }
         }
-
-        revert("CrossL2Inbox: call failed");
     }
 }
