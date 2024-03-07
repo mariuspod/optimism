@@ -84,15 +84,20 @@ contract CrossL2Inbox is ISemver {
         _executeMessage(_target, _msg);
 
         assembly {
-            if call(
-                gas(), // gas
-                _target, // recipient
-                callvalue(), // ether value
-                add(_msg, 32), // inloc
-                mload(_msg), // inlen
-                0, // outloc
-                0 // outlen
-            ) { return(0x0, 0) }
+            if not(
+                call(
+                    gas(), // gas
+                    _target, // recipient
+                    callvalue(), // ether value
+                    add(_msg, 32), // inloc
+                    mload(_msg), // inlen
+                    0, // outloc
+                    0 // outlen
+                )
+            ) {
+                mstore(0x00, 0x3204506f) // 0x3204506f is the 4-byte selector of "CallFailed()"
+                revert(0x1C, 0x04) // returns the stored 4-byte selector from above
+            }
         }
     }
 
