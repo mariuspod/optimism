@@ -11,7 +11,7 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/log"
 
-	da "github.com/ethereum-optimism/optimism/op-da"
+	"github.com/ethereum-optimism/optimism/op-node/dadb"
 	"github.com/ethereum-optimism/optimism/op-service/eth"
 )
 
@@ -86,13 +86,13 @@ func DataFromEVMTransactions(dsCfg DataSourceConfig, batcherAddr common.Address,
 			} else {
 				version := tx.Data()[0]
 				switch version {
-				case da.DaDbVersion:
-					daTxId, err := da.Decode(tx.Data()[1:])
+				case dadb.DaDbVersion:
+					daTxId, err := dadb.Decode(tx.Data()[1:])
 					if err != nil {
 						log.Error("could not decode daTxId from tx data", "i", i, "data", tx.Data(), "err", err)
 						continue
 					}
-					data, err := da.DiscoverCallData(daTxId)
+					data, err := dadb.DiscoverCallData(daTxId)
 					if err != nil {
 						log.Error("could not retrieve tx data for daTxId", "i", i, "daTxId", daTxId, "err", err)
 						continue
