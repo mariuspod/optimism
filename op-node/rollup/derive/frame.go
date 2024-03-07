@@ -138,7 +138,7 @@ func ParseFrames(data []byte) ([]Frame, error) {
 	for buf.Len() > 0 {
 		var f Frame
 		if err := f.UnmarshalBinary(buf); err != nil {
-			return nil, fmt.Errorf("parsing frame %d: %w", len(frames), err)
+			return nil, fmt.Errorf("parsing frame %d, %v: %w", len(frames), data, err)
 		}
 		frames = append(frames, f)
 	}

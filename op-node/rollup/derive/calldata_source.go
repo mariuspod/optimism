@@ -11,6 +11,7 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/log"
 
+	da "github.com/ethereum-optimism/optimism/op-da"
 	"github.com/ethereum-optimism/optimism/op-service/eth"
 )
 
@@ -78,9 +79,29 @@ func (ds *CalldataSource) Next(ctx context.Context) (eth.Data, error) {
 // This will return an empty array if no valid transactions are found.
 func DataFromEVMTransactions(dsCfg DataSourceConfig, batcherAddr common.Address, txs types.Transactions, log log.Logger) []eth.Data {
 	out := []eth.Data{}
-	for _, tx := range txs {
+	for i, tx := range txs {
 		if isValidBatchTx(tx, dsCfg.l1Signer, dsCfg.batchInboxAddress, batcherAddr) {
-			out = append(out, tx.Data())
+			if len(tx.Data()) == 0 {
+				out = append(out, tx.Data())
+			} else {
+				version := tx.Data()[0]
+				switch version {
+				case da.DaDbVersion:
+					daTxId, err := da.Decode(tx.Data()[1:])
+					if err != nil {
+						log.Error("could not decode daTxId from tx data", "i", i, "data", tx.Data(), "err", err)
+						continue
+					}
+					data, err := da.DiscoverCallData(daTxId)
+					if err != nil {
+						log.Error("could not retrieve tx data for daTxId", "i", i, "daTxId", daTxId, "err", err)
+						continue
+					}
+					out = append(out, data)
+				default:
+					out = append(out, tx.Data())
+				}
+			}
 		}
 	}
 	return out

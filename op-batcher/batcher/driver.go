@@ -15,6 +15,7 @@ import (
 	"github.com/ethereum/go-ethereum/log"
 
 	"github.com/ethereum-optimism/optimism/op-batcher/metrics"
+	dadb "github.com/ethereum-optimism/optimism/op-da"
 	"github.com/ethereum-optimism/optimism/op-node/rollup"
 	"github.com/ethereum-optimism/optimism/op-node/rollup/derive"
 	"github.com/ethereum-optimism/optimism/op-service/dial"
@@ -374,6 +375,23 @@ func (l *BatchSubmitter) sendTransaction(txdata txData, queue *txmgr.Queue[txDat
 		}
 	} else {
 		candidate = l.calldataTxCandidate(data)
+	}
+
+	daTxId, err := dadb.PublishCallData(candidate.TxData)
+	if err != nil || daTxId <= 0 {
+		l.Log.Warn("Failed to publish the TxData to DADB, falling back to default DA")
+	} else {
+		l.Log.Info("Published TxData to DADB", "daTxId", daTxId)
+
+		daTxIdBytes, err := dadb.Encode(daTxId)
+		if err != nil {
+			l.Log.Warn("Failed to decode daTxId, falling back to default DA")
+		} else {
+			// DADB layout
+			// | 1 byte  | 8 bytes |
+			// | version | daTxId  |
+			candidate.TxData = append([]byte{dadb.DaDbVersion}, daTxIdBytes...)
+		}
 	}
 
 	intrinsicGas, err := core.IntrinsicGas(candidate.TxData, nil, false, true, true, false)
