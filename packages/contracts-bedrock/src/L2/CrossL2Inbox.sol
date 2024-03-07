@@ -104,5 +104,7 @@ contract CrossL2Inbox is ISemver {
                     return (0x0, 0)
                 }
         }
+
+        revert("CrossL2Inbox: failed to execute message");
     }
 }
