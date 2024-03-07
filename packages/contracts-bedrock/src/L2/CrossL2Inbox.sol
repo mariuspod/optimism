@@ -82,16 +82,8 @@ contract CrossL2Inbox is ISemver {
         require(msg.sender == tx.origin, "CrossL2Inbox: Not EOA sender"); // only EOA invariant
 
         _executeMessage(_target, _msg);
-    }
 
-    function _executeMessage(address _target, bytes memory _msg) internal {
         assembly {
-            tstore(ORIGIN_SLOT, calldataload(4))
-            tstore(BLOCKNUMBER_SLOT, calldataload(36))
-            tstore(LOG_INDEX_SLOT, calldataload(68))
-            tstore(TIMESTAMP_SLOT, calldataload(100))
-            tstore(CHAINID_SLOT, calldataload(132))
-
             if call(
                 gas(), // gas
                 _target, // recipient
@@ -101,6 +93,16 @@ contract CrossL2Inbox is ISemver {
                 0, // outloc
                 0 // outlen
             ) { return(0x0, 0) }
+        }
+    }
+
+    function _executeMessage(address _target, bytes memory _msg) internal {
+        assembly {
+            tstore(ORIGIN_SLOT, calldataload(4))
+            tstore(BLOCKNUMBER_SLOT, calldataload(36))
+            tstore(LOG_INDEX_SLOT, calldataload(68))
+            tstore(TIMESTAMP_SLOT, calldataload(100))
+            tstore(CHAINID_SLOT, calldataload(132))
         }
     }
 }
