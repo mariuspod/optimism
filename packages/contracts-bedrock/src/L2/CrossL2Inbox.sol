@@ -81,26 +81,28 @@ contract CrossL2Inbox is ISemver {
         require(IL1Block(l1Block).isInDependencySet(_id.chainId), "CrossL2Inbox: invalid id chainId"); // invariant
         require(msg.sender == tx.origin, "CrossL2Inbox: Not EOA sender"); // only EOA invariant
 
-        _executeMessage(_target, _msg);
+        _executeMessage();
+
+        assembly {
+            if call(
+                gas(), // gas
+                _target, // recipient
+                callvalue(), // ether value
+                add(_msg.offset, 32), // inloc
+                _msg.length, // inlen
+                0, // outloc
+                0 // outlen
+            ) { return(0x0, 0x0) }
+        }
     }
 
-    function _executeMessage(address _target, bytes memory _msg) internal {
+    function _executeMessage() internal {
         assembly {
             tstore(ORIGIN_SLOT, calldataload(4))
             tstore(BLOCKNUMBER_SLOT, calldataload(36))
             tstore(LOG_INDEX_SLOT, calldataload(68))
             tstore(TIMESTAMP_SLOT, calldataload(100))
             tstore(CHAINID_SLOT, calldataload(132))
-
-            if call(
-                gas(), // gas
-                _target, // recipient
-                callvalue(), // ether value
-                add(_msg, 32), // inloc
-                mload(_msg), // inlen
-                0, // outloc
-                0 // outlen
-            ) { return(0x0, 0x0) }
         }
     }
 }
