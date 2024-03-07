@@ -95,7 +95,7 @@ contract CrossL2Inbox is ISemver {
                     0 // outlen
                 )
 
-            if !success {
+            if success {
                 mstore(0x00, 0xeda86850) // 0xeda86850 is the 4-byte selector of "TargetCallFailed()"
                 revert(0x1C, 0x04) // returns the stored 4-byte selector from above
             }
