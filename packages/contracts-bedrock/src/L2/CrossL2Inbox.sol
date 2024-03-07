@@ -105,34 +105,28 @@ contract CrossL2Inbox is ISemver {
         validate(_id, _target, _msg, msg.value);
     }
 
-    function validate(Identifier calldata _id, address _target, bytes calldata _msg, uint256 _value) internal {
+    function validate(Identifier calldata _id, address _target, bytes memory _msg, uint256 _value) internal {
+        bool success;
+
         assembly {
             tstore(ORIGIN_SLOT, calldataload(4))
             tstore(BLOCKNUMBER_SLOT, calldataload(36))
             tstore(LOG_INDEX_SLOT, calldataload(68))
             tstore(TIMESTAMP_SLOT, calldataload(100))
             tstore(CHAINID_SLOT, calldataload(132))
-        }
 
-        bool success = callWithAllGas(_target, _value, _msg);
-
-        require(success, "CrossL2Inbox: call failed");
-    }
-
-    function callWithAllGas(address _target, uint256 _value, bytes memory _calldata) internal returns (bool) {
-        bool _success;
-        assembly {
-            _success :=
+            success :=
                 call(
                     gas(), // gas
                     _target, // recipient
                     _value, // ether value
-                    add(_calldata, 32), // inloc
-                    mload(_calldata), // inlen
+                    add(_msg, 32), // inloc
+                    mload(_msg), // inlen
                     0, // outloc
                     0 // outlen
                 )
         }
-        return _success;
+
+        require(success, "CrossL2Inbox: call failed");
     }
 }
