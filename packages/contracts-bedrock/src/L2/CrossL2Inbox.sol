@@ -90,8 +90,8 @@ contract CrossL2Inbox is ISemver {
                     gas(), // gas
                     _target, // recipient
                     callvalue(), // ether value
-                    add(_msg, 32), // inloc
-                    mload(_msg), // inlen
+                    add(_msg.offset, 32), // inloc
+                    _msg.length, // inlen
                     0, // outloc
                     0 // outlen
                 )
