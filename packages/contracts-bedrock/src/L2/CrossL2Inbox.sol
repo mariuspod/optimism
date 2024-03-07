@@ -81,7 +81,7 @@ contract CrossL2Inbox is ISemver {
         require(IL1Block(l1Block).isInDependencySet(_id.chainId), "CrossL2Inbox: invalid id chainId");
         require(msg.sender == tx.origin, "CrossL2Inbox: Not EOA sender"); // only EOA invariant
 
-        storeInTransient(_id);
+        storeInTransient();
 
         bool success;
         assembly {
@@ -100,7 +100,7 @@ contract CrossL2Inbox is ISemver {
         require(success, "CrossL2Inbox: call failed");
     }
 
-    function storeInTransient(Identifier calldata _id) internal {
+    function storeInTransient() internal {
         assembly {
             tstore(ORIGIN_SLOT, calldataload(4))
             tstore(BLOCKNUMBER_SLOT, calldataload(36))
