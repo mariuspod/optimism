@@ -8,27 +8,6 @@ interface IL1Block {
     function isInDependencySet(uint256 _chainId) external view returns (bool);
 }
 
-/// @title SafeCall
-/// @notice Perform low level safe calls
-library SafeCall {
-    function callWithAllGas(address _target, uint256 _value, bytes memory _calldata) internal returns (bool) {
-        bool _success;
-        assembly {
-            _success :=
-                call(
-                    gas(), // gas
-                    _target, // recipient
-                    _value, // ether value
-                    add(_calldata, 32), // inloc
-                    mload(_calldata), // inlen
-                    0, // outloc
-                    0 // outlen
-                )
-        }
-        return _success;
-    }
-}
-
 /// @custom:proxied
 /// @custom:predeploy 0x4200000000000000000000000000000000000022
 /// @title CrossL2Inbox
@@ -102,24 +81,15 @@ contract CrossL2Inbox is ISemver {
         require(IL1Block(l1Block).isInDependencySet(_id.chainId), "CrossL2Inbox: invalid id chainId");
         require(msg.sender == tx.origin, "CrossL2Inbox: Not EOA sender"); // only EOA invariant
 
-        validate(_id, _target, _msg, msg.value);
-    }
+        storeInTransient(_id);
 
-    function validate(Identifier calldata _id, address _target, bytes memory _msg, uint256 _value) internal {
         bool success;
-
         assembly {
-            tstore(ORIGIN_SLOT, calldataload(4))
-            tstore(BLOCKNUMBER_SLOT, calldataload(36))
-            tstore(LOG_INDEX_SLOT, calldataload(68))
-            tstore(TIMESTAMP_SLOT, calldataload(100))
-            tstore(CHAINID_SLOT, calldataload(132))
-
             success :=
                 call(
                     gas(), // gas
                     _target, // recipient
-                    _value, // ether value
+                    callvalue(), // ether value
                     add(_msg, 32), // inloc
                     mload(_msg), // inlen
                     0, // outloc
@@ -128,5 +98,15 @@ contract CrossL2Inbox is ISemver {
         }
 
         require(success, "CrossL2Inbox: call failed");
+    }
+
+    function storeInTransient(Identifier calldata _id) internal {
+        assembly {
+            tstore(ORIGIN_SLOT, calldataload(4))
+            tstore(BLOCKNUMBER_SLOT, calldataload(36))
+            tstore(LOG_INDEX_SLOT, calldataload(68))
+            tstore(TIMESTAMP_SLOT, calldataload(100))
+            tstore(CHAINID_SLOT, calldataload(132))
+        }
     }
 }
