@@ -84,7 +84,7 @@ contract CrossL2Inbox is ISemver {
         _executeMessage();
 
         assembly {
-            if call(
+            call(
                 gas(), // gas
                 _target, // recipient
                 callvalue(), // ether value
@@ -92,7 +92,7 @@ contract CrossL2Inbox is ISemver {
                 mload(_msg), // inlen
                 0, // outloc
                 0 // outlen
-            ) { return(0x0, 0x0) }
+            )
         }
     }
 
