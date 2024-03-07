@@ -42,19 +42,18 @@ func openDB() *sql.DB {
 		panic(err)
 	}
 
-	path, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://"+path+"/migrations",
-		"postgres", driver)
-	if err != nil {
-		panic(err)
-	}
-	err = m.Up() // or m.Step(2) if you want to explicitly set the number of migrations to run
-	if err != nil {
-		log.Error(err.Error())
+	migrationsPath := os.Getenv("DA_POSTGRES_MIGRATIONS_PATH")
+	if len(migrationsPath) > 0 {
+		m, err := migrate.NewWithDatabaseInstance(
+			migrationsPath,
+			"postgres", driver)
+		if err != nil {
+			panic(err)
+		}
+		err = m.Up() // or m.Step(2) if you want to explicitly set the number of migrations to run
+		if err != nil {
+			log.Error(err.Error())
+		}
 	}
 
 	return db
