@@ -6,7 +6,9 @@ import (
 	"os"
 
 	"github.com/ethereum/go-ethereum/log"
-
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
 )
 
@@ -34,6 +36,27 @@ func openDB() *sql.DB {
 	if err := db.Ping(); err != nil {
 		log.Error(err.Error())
 	}
+
+	driver, err := postgres.WithInstance(db, &postgres.Config{})
+	if err != nil {
+		panic(err)
+	}
+
+	path, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	m, err := migrate.NewWithDatabaseInstance(
+		"file://"+path+"/migrations",
+		"postgres", driver)
+	if err != nil {
+		panic(err)
+	}
+	err = m.Up() // or m.Step(2) if you want to explicitly set the number of migrations to run
+	if err != nil {
+		log.Error(err.Error())
+	}
+
 	return db
 }
 

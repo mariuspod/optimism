@@ -35,7 +35,7 @@ require (
 	github.com/multiformats/go-multiaddr v0.12.1
 	github.com/multiformats/go-multiaddr-dns v0.3.1
 	github.com/olekukonko/tablewriter v0.0.5
-	github.com/onsi/gomega v1.30.0
+	github.com/onsi/gomega v1.31.1
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/profile v1.7.0
 	github.com/prometheus/client_golang v1.18.0
@@ -48,6 +48,12 @@ require (
 	golang.org/x/time v0.5.0
 	gorm.io/driver/postgres v1.5.4
 	gorm.io/gorm v1.25.5
+)
+
+require (
+	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
+	github.com/oapi-codegen/runtime v1.0.0 // indirect
+	go.uber.org/atomic v1.11.0 // indirect
 )
 
 require (
@@ -102,6 +108,7 @@ require (
 	github.com/gofrs/flock v0.8.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
+	github.com/golang-migrate/migrate/v4 v4.17.0
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/gopacket v1.1.19 // indirect
 	github.com/google/pprof v0.0.0-20231023181126-ff6d637d2a7b // indirect
@@ -118,7 +125,7 @@ require (
 	github.com/holiman/billy v0.0.0-20230718173358-1c7e68d277a7 // indirect
 	github.com/holiman/bloomfilter/v2 v2.0.3 // indirect
 	github.com/huin/goupnp v1.3.0 // indirect
-	github.com/influxdata/influxdb-client-go/v2 v2.4.0 // indirect
+	github.com/influxdata/influxdb-client-go/v2 v2.13.0 // indirect
 	github.com/influxdata/influxdb1-client v0.0.0-20220302092344-a9ab5670611c // indirect
 	github.com/influxdata/line-protocol v0.0.0-20210311194329-9aa0e372d097 // indirect
 	github.com/ipfs/go-cid v0.4.1 // indirect
@@ -171,7 +178,7 @@ require (
 	github.com/multiformats/go-varint v0.0.7 // indirect
 	github.com/naoina/go-stringutil v0.1.0 // indirect
 	github.com/naoina/toml v0.1.2-0.20170918210437-9fafd6967416 // indirect
-	github.com/onsi/ginkgo/v2 v2.13.0 // indirect
+	github.com/onsi/ginkgo/v2 v2.15.0 // indirect
 	github.com/opencontainers/runtime-spec v1.1.0 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/pbnjay/memory v0.0.0-20210728143218-7b4eea64cf58 // indirect
@@ -206,11 +213,11 @@ require (
 	go.uber.org/mock v0.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.26.0 // indirect
-	golang.org/x/mod v0.13.0 // indirect
-	golang.org/x/net v0.17.0 // indirect
+	golang.org/x/mod v0.14.0 // indirect
+	golang.org/x/net v0.19.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
-	golang.org/x/tools v0.14.0 // indirect
+	golang.org/x/tools v0.16.1 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
