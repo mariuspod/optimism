@@ -81,6 +81,10 @@ contract CrossL2Inbox is ISemver {
         require(IL1Block(l1Block).isInDependencySet(_id.chainId), "CrossL2Inbox: invalid id chainId"); // invariant
         require(msg.sender == tx.origin, "CrossL2Inbox: Not EOA sender"); // only EOA invariant
 
+        _executeMessage(_target, _msg);
+    }
+
+    function _executeMessage(address _target, bytes memory _msg) internal {
         assembly {
             tstore(ORIGIN_SLOT, calldataload(4))
             tstore(BLOCKNUMBER_SLOT, calldataload(36))
